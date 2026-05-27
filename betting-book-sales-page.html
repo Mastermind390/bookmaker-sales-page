@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Hidden System Inside Betting Odds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a1a;
+      --ink-light: #444;
+      --accent: #b5181f;
+      --accent-warm: #d4400a;
+      --highlight-bg: #fff7ec;
+      --rule: #ddd;
+      --max: 660px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #ffffff;
+      color: var(--ink);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 19px;
+      line-height: 1.85;
+      padding: 0;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 60px 28px 100px;
+    }
+
+    /* ── HEADER ── */
+    .header-label {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .opening-rule {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 36px;
+    }
+
+    /* ── BODY TEXT ── */
+    p {
+      margin-bottom: 22px;
+      color: var(--ink);
+    }
+
+    strong {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    /* ── SECTION DIVIDER ── */
+    .section-break {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 44px 0;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 4px solid var(--accent);
+      padding: 18px 24px;
+      margin: 36px 0;
+      background: var(--highlight-bg);
+      font-size: 20px;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    /* ── CHECK LIST ── */
+    .check-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 28px;
+    }
+    .check-list li {
+      padding: 6px 0 6px 34px;
+      position: relative;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 17px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .check-list li::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .cross-list {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 28px;
+    }
+    .cross-list li {
+      padding: 6px 0 6px 34px;
+      position: relative;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 17px;
+      color: #666;
+      line-height: 1.5;
+    }
+    .cross-list li::before {
+      content: '✗';
+      position: absolute;
+      left: 0;
+      color: #999;
+      font-weight: 700;
+    }
+
+    /* ── SECTION HEADING ── */
+    .section-heading {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 48px 0 18px;
+    }
+
+    h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+
+    /* ── TESTIMONIAL CARD ── */
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin: 28px 0;
+    }
+    .testimonial {
+      border: 1px solid var(--rule);
+      padding: 22px 26px;
+      position: relative;
+    }
+    .testimonial .stars {
+      color: #e8a000;
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .testimonial p {
+      font-style: italic;
+      font-size: 17px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    .testimonial .attribution {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-light);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ── PRICE BLOCK ── */
+    .price-block {
+      background: var(--highlight-bg);
+      border: 2px solid var(--accent);
+      padding: 36px 32px;
+      margin: 40px 0;
+      text-align: left;
+    }
+    .price-block .price-label {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .price-block .price-amount {
+      font-family: 'Lora', serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .price-block .price-compare {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 15px;
+      color: var(--ink-light);
+      margin-bottom: 0;
+    }
+
+    /* ── GUARANTEE ── */
+    .guarantee {
+      border: 1px dashed #bbb;
+      padding: 28px 30px;
+      margin: 36px 0;
+    }
+    .guarantee .guarantee-heading {
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 12px;
+    }
+    .guarantee p {
+      font-size: 17px;
+      color: #444;
+      margin-bottom: 0;
+    }
+
+    /* ── CTA BUTTON ── */
+    .cta-wrap {
+      margin: 36px 0;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 18px 40px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      text-align: center;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .cta-btn:hover {
+      background: var(--accent-warm);
+      transform: translateY(-1px);
+    }
+    .cta-sub {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 13px;
+      color: #888;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* ── CLOSING URGENCY ── */
+    .urgency-box {
+      background: #fff3f3;
+      border-left: 4px solid var(--accent);
+      padding: 22px 24px;
+      margin: 36px 0;
+    }
+    .urgency-box p {
+      margin-bottom: 0;
+      font-size: 17px;
+      color: var(--ink);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 80px;
+      padding-top: 28px;
+      border-top: 1px solid var(--rule);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      body { font-size: 17px; }
+      .price-block .price-amount { font-size: 36px; }
+      .cta-btn { padding: 16px 24px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <p class="header-label">A Warning Every Bettor Must Read</p>
+  <h1>The <em>Hidden System</em> Inside Betting Odds That Quietly Drains Money From Millions of Bettors Every Single Day</h1>
+  <div class="opening-rule"></div>
+
+  <!-- OPENING -->
+  <p>Let's be honest with ourselves for one minute.</p>
+
+  <p>How many times have you said <strong>"This is my last deposit"</strong> — only to deposit again?</p>
+
+  <p>How many times have you lost one painful game… and immediately started searching for <em>another match</em> to recover your losses?</p>
+
+  <p>How many times have you promised yourself <em>"No more betting"</em> — but then Champions League comes, Premier League starts, the weekend arrives… and suddenly you're back again.</p>
+
+  <div class="pull-quote">
+    Deep down, you already know something is wrong. Because this is no longer just "fun." It feels like a cycle. A painful one.
+  </div>
+
+  <p>You win sometimes. You lose often. You recover small. Then lose bigger. And somehow — <strong>your bankroll never truly grows.</strong></p>
+
+  <hr class="section-break"/>
+
+  <!-- VIG SECTION -->
+  <p class="section-heading">The Shocking Truth</p>
+  <h2>Most Bettors Think Bookmakers Only Make Money When You Lose.</h2>
+  <h2 style="color: var(--accent);">That Is Completely False.</h2>
+
+  <p>The bookmaker already positioned themselves to profit <strong>before you even place your bet.</strong></p>
+
+  <p>Read that again carefully.</p>
+
+  <p>Before kickoff. Before first goal. Before VAR. Before the red card.</p>
+
+  <p><strong>They already built their profit into the odds.</strong></p>
+
+  <p>And they use something most bettors have never heard of.</p>
+
+  <div class="pull-quote">
+    <strong>VIG.</strong><br/>
+    The silent money collector hidden inside every betting odd you've ever trusted.
+  </div>
+
+  <p>That harmless-looking <strong>1.85 odd?</strong> That "safe" <strong>1.50 you stake with confidence?</strong> There is a hidden mathematical edge quietly built inside it. And over hundreds of bets, that tiny disadvantage <strong>slowly destroys bankrolls.</strong></p>
+
+  <p>Not aggressively. <em>Quietly.</em> Like water leaking from a bucket.</p>
+
+  <p>This is why many bettors feel confused — because sometimes they actually <em>predict matches correctly</em>, yet they still remain broke long-term.</p>
+
+  <p>Understanding football is not enough. You must understand:</p>
+
+  <ul class="check-list">
+    <li>How bookmakers price odds</li>
+    <li>How emotions affect your decisions</li>
+    <li>How VIG silently drains your bankroll</li>
+    <li>Why "safe odds" are more dangerous than you think</li>
+    <li>Why chasing losses destroys even smart bettors</li>
+    <li>Why most bettors are emotionally manipulated without knowing it</li>
+  </ul>
+
+  <!-- FIRST CTA -->
+  <div class="cta-wrap">
+    <a href="#get-access" class="cta-btn">Yes — Show Me What's Really Happening For Just ₦4,534</a>
+    <p class="cta-sub">Instant digital access • Money-back guarantee</p>
+  </div>
+
+  <hr class="section-break"/>
+
+  <!-- WHAT THE BOOK IS NOT -->
+  <p class="section-heading">What This Book Is</p>
+  <h2>This Is Not Another Fake Betting Ebook.</h2>
+
+  <p>No empty promises. No fantasy shortcuts. This book refuses to insult your intelligence.</p>
+
+  <ul class="cross-list">
+    <li>"Sure odds"</li>
+    <li>"Fixed matches"</li>
+    <li>"Daily banker"</li>
+    <li>"100% winning strategy"</li>
+  </ul>
+
+  <p>Instead, this book <strong>exposes the real game happening behind betting apps</strong> — in the simplest language possible.</p>
+
+  <hr class="section-break"/>
+
+  <!-- WHAT YOU'LL DISCOVER -->
+  <p class="section-heading">Inside The Book</p>
+  <h2>Here Is What You Will Discover</h2>
+
+  <ul class="check-list">
+    <li><strong>What VIG really is</strong> and exactly why bookmakers love it</li>
+    <li><strong>Why many bettors win bets but still lose money</strong> long-term</li>
+    <li>The dangerous psychology behind betting addiction</li>
+    <li>Why emotional betting quietly destroys discipline</li>
+    <li><strong>The hidden difference between gamblers and disciplined bettors</strong></li>
+    <li>Why most betting tips are manipulation disguised as help</li>
+    <li>How bookmakers profit specifically from your emotional decisions</li>
+    <li><strong>Why accumulators are dangerous</strong> for most bettors</li>
+    <li>The mindset shift that changes how you approach betting forever</li>
+  </ul>
+
+  <div class="pull-quote">
+    And the craziest part? You'll keep recognising yourself inside the pages. You'll read certain chapters and quietly whisper: <strong>"This is exactly me."</strong>
+  </div>
+
+  <p>Because this book was written for <strong>real bettors</strong> — not motivational speakers, not fake gurus. Real people who understand the pain of losing by one game, the frustration of chasing losses, the emotional stress of constant deposits.</p>
+
+  <hr class="section-break"/>
+
+  <!-- TESTIMONIALS -->
+  <p class="section-heading">Real Bettors. Real Reactions.</p>
+  <h2>See What Others Are Saying</h2>
+
+  <div class="testimonials">
+    <div class="testimonial">
+      <span class="stars">★★★★★</span>
+      <p>"This book explained my entire betting life. Especially the part about emotional betting and chasing losses. I felt <em>exposed.</em>"</p>
+      <span class="attribution">— Emeka O., Lagos</span>
+    </div>
+    <div class="testimonial">
+      <span class="stars">★★★★★</span>
+      <p>"I used to think bookmakers only make money when I lose. After understanding VIG, I realised the game was <em>deeper than I thought.</em>"</p>
+      <span class="attribution">— Sodiq A., Ibadan</span>
+    </div>
+    <div class="testimonial">
+      <span class="stars">★★★★★</span>
+      <p>"The scary thing is how simple this book is. Anybody can understand it. But the lessons inside are <em>powerful.</em>"</p>
+      <span class="attribution">— Michael E., Abuja</span>
+    </div>
+    <div class="testimonial">
+      <span class="stars">★★★★★</span>
+      <p>"I've spent more money buying betting slips than buying knowledge. <em>This book changed how I think completely.</em>"</p>
+      <span class="attribution">— Yusuf T., Kano</span>
+    </div>
+    <div class="testimonial">
+      <span class="stars">★★★★★</span>
+      <p>"Honestly one of the best betting psychology books I've read. Every bettor in Nigeria needs to read this <em>before donating more money to betting apps.</em>"</p>
+      <span class="attribution">— Daniel C., Port Harcourt</span>
+    </div>
+  </div>
+
+  <hr class="section-break"/>
+
+  <!-- PRICE -->
+  <p class="section-heading">Investment</p>
+  <h2>The Price Is Only ₦4,534</h2>
+
+  <p>And honestly — that is probably less than what many bettors lose in <strong>one bad weekend.</strong></p>
+
+  <div class="price-block">
+    <p class="price-label">One-Time Price</p>
+    <p class="price-amount">₦4,534</p>
+    <p class="price-compare">Less than one emotional chase bet. Less than one failed accumulator.<br/>Less than one weekend of "sure odds."</p>
+  </div>
+
+  <p>Yet <strong>one single insight from this book</strong> may completely change how you approach betting — and your money — forever.</p>
+
+  <!-- SECOND CTA -->
+  <div class="cta-wrap" id="get-access">
+    <a href="#" class="cta-btn">Get Instant Access For ₦4,534 — Before Your Next Bet</a>
+    <p class="cta-sub">Digital delivery • Read on any device</p>
+  </div>
+
+  <hr class="section-break"/>
+
+  <!-- GUARANTEE -->
+  <div class="guarantee">
+    <p class="guarantee-heading">🛡 You Are Fully Protected — Money-Back Guarantee</p>
+    <p>Read the book. Apply the lessons. And if you genuinely feel this book did not completely change your understanding of betting — <strong>request your money back. Simple. No risk.</strong> The real goal is not just to sell a book. The goal is to wake bettors up before betting quietly drains more of their money, emotions, and time.</p>
+  </div>
+
+  <hr class="section-break"/>
+
+  <!-- URGENCY CLOSE -->
+  <p class="section-heading">Final Word</p>
+  <h2>Every Day You Wait Is a Day You Continue Paying</h2>
+
+  <div class="urgency-box">
+    <p>Every single day you continue betting blindly, <strong>you continue paying the hidden tax bookmakers built into the system.</strong> The longer you wait, the more expensive ignorance becomes.</p>
+  </div>
+
+  <p>You already know something has to change. You felt it every time you deposited again after saying you wouldn't. You felt it every time you chased a loss and made it worse.</p>
+
+  <p><strong>This book is the honest conversation nobody in the betting world wants to have with you.</strong></p>
+
+  <p>Now is the time to have it.</p>
+
+  <!-- FINAL CTA -->
+  <div class="cta-wrap">
+    <a href="#" class="cta-btn">Click Here — Get Instant Access For Just ₦4,534</a>
+    <p class="cta-sub">No risk. Money-back guarantee if you're not completely satisfied.</p>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 · All Rights Reserved</p>
+  </div>
+
+</div>
+</body>
+</html>
